@@ -1,0 +1,119 @@
+/* MemeSubmission.css */
+.meme-submission-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Styles */
+.meme-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #2e1a47;
+  color: white;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.header-right {
+  text-align: right;
+}
+
+.progress-text {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.progress-count {
+  font-weight: bold;
+}
+
+.progress-message {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Content Styles */
+.meme-content {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar Styles */
+.meme-sidebar {
+  width: 90px;
+  background-color: rgba(46, 26, 71, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.sidebar-button {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 20px 5px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Main Area Styles */
+.meme-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.cat-container {
+  margin-bottom: 30px;
+}
+
+.cat-image {
+  width: 250px;
+  height: auto;
+}
+
+.submission-message {
+  text-align: center;
+  color: white;
+}
+
+.success-title {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #4eff91;
+  text-shadow: 0 0 10px rgba(78, 255, 145, 0.5);
+}
+
+.waiting-text {
+  font-size: 18px;
+  color: white;
+  opacity: 0.9;
+}

@@ -1,39 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState } from 'react'
 import './App.css'
-import Buton from './buton'
+import WelcomeScreen from './components/WelcomeScreen'
+import RoomsList from './components/RoomsList'
+import MemeDemo from './components/MemeDemo'
+import { UserProvider, useUser } from './context/UserContext'
+import socketManager from './socket/socketManager'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// Main App wrapper with UserProvider context
+function AppWithProvider() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-      <Buton count = {count} setCount = {setCount}/>
-      <Buton count = {count} setCount = {setCount}/>
-      <button onClick={()=>alert("PORNO")}>
-        aaaaaaaaaaaaaaaaaaaaaa
-      </button>
-
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
   )
 }
 
-export default App
+// App content that uses the user context
+function AppContent() {
+  const { isLoggedIn } = useUser()
+  const [showDemo, setShowDemo] = useState(false)
+
+  // Demo modunu açıp kapatmak için
+  const toggleDemo = () => {
+    setShowDemo(!showDemo)
+  }
+
+  // Eğer demo modu açıksa, demo bileşenini göster
+  if (showDemo) {
+    return (
+      <div className="app">
+        <MemeDemo />
+        <button
+          onClick={() => {
+            // Demo modundan çıkarken socket bağlantısını yeniden başlat
+            socketManager.reconnect();
+            toggleDemo();
+          }}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '20px',
+            padding: '10px 15px',
+            backgroundColor: '#f44336',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            zIndex: 1000
+          }}
+        >
+          Demo Modundan Çık
+        </button>
+      </div>
+    )
+  }
+
+  // Normal uygulama görünümü
+  return (
+    <div className="app">
+      {isLoggedIn ? <RoomsList /> : <WelcomeScreen />}
+      <button
+        onClick={toggleDemo}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          padding: '10px 15px',
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          zIndex: 1000
+        }}
+      >
+        Meme Demo Modunu Aç
+      </button>
+    </div>
+  )
+}
+
+export default AppWithProvider
