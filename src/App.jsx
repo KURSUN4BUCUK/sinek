@@ -21,6 +21,9 @@ function App() {
       <div className="card">
       <Buton count = {count} setCount = {setCount}/>
       <Buton count = {count} setCount = {setCount}/>
+      <button onClick={()=>alert("PORNO")}>
+        aaaaaaaaaaaaaaaaaaaaaa
+      </button>
 
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
