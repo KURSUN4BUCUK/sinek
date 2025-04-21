@@ -9,10 +9,9 @@ import ErrorPage from "./ErrorPage";
 
 function GameRoom() {
   const roomId = new URLSearchParams(window.location.search).get("room");
-  const { user, login } = useUser();
+  const { user } = useUser();
   const [participants, setParticipants] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [host, setHost] = useState(null);
   const socketClient = useRef(null);
@@ -31,6 +30,7 @@ function GameRoom() {
         id: u.id,
         name: u.user.name,
         img: u.user.img,
+        score: 0,
       })));
 
       // Host atama
