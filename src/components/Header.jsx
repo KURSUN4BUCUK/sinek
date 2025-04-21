@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Header.css';
 
-function Header({ username, onLogout, showBackButton, onBack, roomId }) {
+function Header({ user, onLogout, showBackButton, onBack, roomId }) {
   return (
     <header className="app-header">
       <div className="header-content">
@@ -16,7 +16,7 @@ function Header({ username, onLogout, showBackButton, onBack, roomId }) {
 
         <div className="user-info">
           {roomId && <span className="room-name">Oda: {roomId}</span>}
-          {username && <span className="username">Merhaba, {username}</span>}
+          {user != null && <span className="username">Merhaba, {user.name}</span>}
           {onLogout && (
             <button className="logout-button" onClick={onLogout}>
               Çıkış Yap

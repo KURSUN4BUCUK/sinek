@@ -1,83 +1,59 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
-import WelcomeScreen from './components/WelcomeScreen'
-import RoomsList from './components/RoomsList'
-import MemeDemo from './components/MemeDemo'
-import { UserProvider, useUser } from './context/UserContext'
-import socketManager from './socket/socketManager'
-
-// Main App wrapper with UserProvider context
-function AppWithProvider() {
-  return (
-    <UserProvider>
-      <AppContent />
-    </UserProvider>
-  )
-}
+import { useUser } from './context/UserContext'
+import GameRoom from './components/GameRoom'
+import ErrorPage from './components/ErrorPage'
 
 // App content that uses the user context
 function AppContent() {
-  const { isLoggedIn } = useUser()
-  const [showDemo, setShowDemo] = useState(false)
+  const { user, login } = useUser()
+  const [error, setError] = useState(null)
 
-  // Demo modunu açıp kapatmak için
-  const toggleDemo = () => {
-    setShowDemo(!showDemo)
+  useEffect(()=>{
+    if(!user){
+      const userName = new URLSearchParams(window.location.search).get("name");
+      fetch("https://api.topluyo.com/user/info/"+userName,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response)=>{
+        if(response.ok){
+          return response.json()
+        }else{
+          throw new Error("Kullanıcı bulunamadı.")
+        }
+      }).then((data)=>{
+        if(data && data.data){
+          const {nick, image} = data.data
+          login({name: nick, img: image});
+        }else{
+          throw new Error("Kullanıcı bulunamadı.")
+        }
+      }).catch((error)=>{
+        setError(error.message)
+        console.error("Kullanıcı bilgileri alınamadı:", error);
+      })
+    }
+  },[])
+
+  if(error){
+    return <ErrorPage error={error} />
   }
 
-  // Eğer demo modu açıksa, demo bileşenini göster
-  if (showDemo) {
+  if(!user) {
     return (
-      <div className="app">
-        <MemeDemo />
-        <button
-          onClick={() => {
-            // Demo modundan çıkarken socket bağlantısını yeniden başlat
-            socketManager.reconnect();
-            toggleDemo();
-          }}
-          style={{
-            position: 'fixed',
-            bottom: '20px',
-            left: '20px',
-            padding: '10px 15px',
-            backgroundColor: '#f44336',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            zIndex: 1000
-          }}
-        >
-          Demo Modundan Çık
-        </button>
+      <div>
+        <p>Giriş Yapılamadı.</p>
       </div>
     )
   }
-
   // Normal uygulama görünümü
   return (
     <div className="app">
-      {isLoggedIn ? <RoomsList /> : <WelcomeScreen />}
-      <button
-        onClick={toggleDemo}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          left: '20px',
-          padding: '10px 15px',
-          backgroundColor: '#4CAF50',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          zIndex: 1000
-        }}
-      >
-        Meme Demo Modunu Aç
-      </button>
+      <GameRoom/>
     </div>
   )
 }
 
-export default AppWithProvider
+export default AppContent

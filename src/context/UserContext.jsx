@@ -3,21 +3,21 @@ import { createContext, useState, useContext } from 'react';
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [username, setUsername] = useState('');
+  const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = (name) => {
-    setUsername(name);
+  const login = ({name,img}) => {
+    setUser({name,img});
     setIsLoggedIn(true);
   };
 
   const logout = () => {
-    setUsername('');
+    setUser(null);
     setIsLoggedIn(false);
   };
 
   const value = {
-    username,
+    user,
     isLoggedIn,
     login,
     logout
